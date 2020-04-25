@@ -1,0 +1,19 @@
+{
+  "name": "testnode",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "author": "Daniel Felizardo <daniel.david772@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "jest": "^25.4.0",
+    "nodemon": "^2.0.3"
+  }
+}
