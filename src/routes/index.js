@@ -1,9 +1,9 @@
 const { Router } = require('express');
 
+const userRoutes = require('./user.routes');
+
 const routes = Router();
 
-routes.get('/', (req, res) => res.json({ ok: true }));
-
-routes.get('/users', (req, res) => res.json({ ok: true }));
+routes.use('/users', userRoutes);
 
 module.exports = routes;
