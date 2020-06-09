@@ -3,27 +3,24 @@ const request = require('supertest');
 const app = require('../../src/app');
 
 const truncate = require('../utils/trucante');
+const factory = require('../factories');
 
 describe('Session Store', () => {
   beforeEach(async () => {
     await truncate();
   });
 
-  it('should be able created a session to one user', async () => {
-    const user = {
-      name: 'Daniel',
-      email: 'daniel@email.com',
+  it('should be able created a session to user', async () => {
+    const user = await factory.create('User', {
       password: '123456',
-    };
-
-    await request(app).post('/users').send(user);
-
-    const responseSession = await request(app).post('/sessions').send({
-      email: user.email,
-      password: user.password,
     });
 
-    expect(responseSession.body).toHaveProperty('token');
+    const response = await request(app).post('/sessions').send({
+      email: user.email,
+      password: '123456',
+    });
+
+    expect(response.body).toHaveProperty('token');
   });
 
   it('should not be able created a new session same email user', async () => {
@@ -41,13 +38,7 @@ describe('Session Store', () => {
   });
 
   it('should not be able created a new session with invalid pasword', async () => {
-    const user = {
-      name: 'Daniel',
-      email: 'daniel@email.com',
-      password: '123456',
-    };
-
-    await request(app).post('/users').send(user);
+    const user = await factory.create('User');
 
     const response = await request(app).post('/sessions').send({
       email: user.email,

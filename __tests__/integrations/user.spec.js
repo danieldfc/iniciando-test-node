@@ -4,6 +4,7 @@ const { compare } = require('bcryptjs');
 const app = require('../../src/app');
 
 const truncate = require('../utils/trucante');
+const factory = require('../factories');
 
 describe('User Store', () => {
   beforeEach(async () => {
@@ -11,11 +12,7 @@ describe('User Store', () => {
   });
 
   it('should be able created new user', async () => {
-    const user = {
-      name: 'Daniel',
-      email: 'daniel@email.com',
-      password: '123456',
-    };
+    const user = await factory.attrs('User');
 
     const response = await request(app).post('/users').send(user);
 
@@ -23,11 +20,7 @@ describe('User Store', () => {
   });
 
   it('should not be able create user, with duplicated email', async () => {
-    const user = {
-      name: 'Daniel',
-      email: 'daniel@email.com',
-      password: '123456',
-    };
+    const user = await factory.attrs('User');
 
     await request(app).post('/users').send(user);
 
@@ -42,16 +35,11 @@ describe('User Store', () => {
   });
 
   it('should be able created new user password encrypted', async () => {
-    const user = {
-      name: 'Daniel',
-      email: 'daniel@email.com',
+    const user = await factory.create('User', {
       password: '123456',
-    };
+    });
 
-    const response = await request(app).post('/users').send(user);
-    const { password } = response.body;
-
-    const compareHash = await compare(user.password, password);
+    const compareHash = await compare('123456', user.password);
 
     expect(compareHash).toBe(true);
   });
